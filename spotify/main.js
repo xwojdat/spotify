@@ -65,6 +65,14 @@ function callAuthorizationApi(body){
     xhr.onload = handleAuthorizationResponse;
 }
 
+function refreshAccessToken(){
+    refresh_token = console.log("refresh_token", refresh_token);
+    let body = "grant-type=refresh_token";
+    body += "&refresh_token=" + refresh_token;
+    body += "&client_id=" + client_id;
+    callAuthorizationApi(body);
+}
+
 function handleAuthorizationResponse(){
     if ( this.status == 200 ){
         var data = JSON.parse(this.responseText);
@@ -79,6 +87,9 @@ function handleAuthorizationResponse(){
             console.log("refresh_token", refresh_token);
         }
         onPageLoad();
+    }
+    else if(this.status == 401){
+        refreshAccessToken();
     }
     else {
         console.log(this.responseText);
